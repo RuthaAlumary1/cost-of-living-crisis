@@ -1,0 +1,192 @@
+---
+title: "Cost-of-Living Crisis in Australia"
+subtitle: "An In-depth Analysis"
+author: "Rutha Alumary (s4008066)"
+date: "01/06/2024"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+# Set CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
+if (!require("tidyr")) install.packages("tidyr", dependencies=TRUE)
+if (!require("plotly")) install.packages("plotly", dependencies=TRUE)
+if (!require("htmltools")) install.packages("htmltools", dependencies=TRUE)
+if (!require("ggplot2")) install.packages("ggplot2", dependencies=TRUE)
+if (!require("dplyr")) install.packages("dplyr", dependencies=TRUE)
+if (!require("readr")) install.packages("readr", dependencies=TRUE)
+
+library(tidyr)
+library(plotly)
+library(htmltools)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(tidyr)
+```
+  
+### <small>What is the Cost-of-Living Crisis?</small>
+<small>The cost-of-living crisis in Australia refers to the increasing difficulty in affording basic expenses. Driven by rising inflation, stagnant wages, and global pressures.</small>
+
+### <small>Impact on the Country</small>
+- <small>**Economic Strain**: Higher living costs vs. wage growth.</small>
+- <small>**Housing Market Pressure**: High prices and rents challenging buyers and renters.</small>
+
+### <small>Impact on Citizens</small>
+- <small>**Decreased Quality of Life**: Cutting back on essentials, delaying major life decisions.</small>
+- <small>**Increased Debt**: More reliance on credit.</small>
+- <small>**Mental Health Strain**: Financial stress affecting well-being.</small>
+
+---
+
+```{r, fig.height=8, fig.width=10, echo=FALSE}
+library(plotly)
+
+cpi_data <- read.csv("/Users/ruthaalumary/Downloads/Weighted average of eight capital cities.csv", skip = 2)
+names(cpi_data) <- c("Category", "NA", "QuarterlyChange", "AnnualChange")
+cpi_data <- cpi_data[,-2] 
+
+fig <- plot_ly(cpi_data, x = ~Category, y = ~AnnualChange, type = 'bar',
+               marker = list(color = 'rgba(158,202,225,0.8)', line = list(color = 'rgba(8,48,107,0.8)', width = 1.5)))
+fig <- fig %>% layout(title = "Annual CPI Inflation by Category",
+                      titlefont = list(size = 24),
+                      xaxis = list(title = "Category", tickangle = -45, titlefont = list(size = 18), tickfont = list(size = 14)),
+                      yaxis = list(title = "Annual Change (%)", titlefont = list(size = 18), tickfont = list(size = 14)),
+                      margin = list(l = 60, r = 30, t = 100, b = 100),
+                      showlegend = FALSE)
+
+fig
+```
+
+---
+
+### Insights from the CPI Inflation by Category
+
+The bar graph in the previous slide offers a detailed breakdown of the annual change in the Consumer Price Index (CPI) by category for March 2024. Here’s what the data tells us:
+
+- **Sectoral Variability**: The graph highlights significant discrepancies in inflation rates across different categories. This variability indicates that while some sectors may be experiencing higher price pressures, others remain relatively stable.
+- **Critical Contributors**: Categories with inflation rates exceeding the overall CPI growth of 3.6% play a crucial role in driving the national inflation figures. These sectors might include essential services and commodities whose prices are more sensitive to external economic pressures.
+- **Economic Indicators**: The sectors showing higher inflation rates can be indicators of broader economic trends, such as supply chain disruptions or increased consumer demand in certain areas.
+- **Policy Implications**: Understanding which categories are contributing most to inflation can help policymakers and economists devise targeted interventions to stabilize prices and manage economic growth effectively.
+
+---
+# CPI Index Numbers and Percentage Changes
+
+```{r cpi-index-changes, fig.height=7, fig.width=10, echo=FALSE}
+library(plotly)
+library(readr)
+
+cpi_data <- readr::read_csv("/Users/ruthaalumary/Downloads/All groups CPI, index numbers and percentage changes.csv", skip = 2)
+
+names(cpi_data) <- c("City", "IndexNumberMarQtr2024", "PercChangeDecQtrToMarQtr", "PercChangeYearOnYear")
+
+fig_index <- plot_ly(data = cpi_data, x = ~City, y = ~IndexNumberMarQtr2024, type = 'bar', name = 'Index Number',
+                     marker = list(color = 'rgba(100,181,246, 0.7)', line = list(color = 'rgba(25,118,210, 1)', width = 1.5)))
+fig_index <- fig_index %>% layout(title = "CPI Index Numbers - March Qtr 2024",
+                                  xaxis = list(title = "City"),
+                                  yaxis = list(title = "Index Number"),
+                                  showlegend = TRUE)
+
+fig_change_dec_to_mar <- plot_ly(data = cpi_data, x = ~City, y = ~PercChangeDecQtrToMarQtr, type = 'bar', name = 'Dec Qtr 2023 to Mar Qtr 2024',
+                                 marker = list(color = 'rgba(255,127,80, 0.7)', line = list(color = 'rgba(255,69,0, 1)', width = 1.5)))
+fig_change_dec_to_mar <- fig_change_dec_to_mar %>% layout(title = "CPI Percentage Changes - Dec Qtr 2023 to Mar Qtr 2024",
+                                                          xaxis = list(title = "City"),
+                                                          yaxis = list(title = "Percentage Change"),
+                                                          showlegend = TRUE)
+
+fig_change_mar_to_mar <- plot_ly(data = cpi_data, x = ~City, y = ~PercChangeYearOnYear, type = 'bar', name = 'Mar Qtr 2023 to Mar Qtr 2024',
+                                 marker = list(color = 'rgba(144,238,144, 0.7)', line = list(color = 'rgba(34,139,34, 1)', width = 1.5)))
+fig_change_mar_to_mar <- fig_change_mar_to_mar %>% layout(title = "CPI Percentage Changes - Mar Qtr 2023 to Mar Qtr 2024",
+                                                          xaxis = list(title = "City"),
+                                                          yaxis = list(title = "Percentage Change"),
+                                                          showlegend = TRUE)
+
+fig <- subplot(fig_index, fig_change_dec_to_mar, fig_change_mar_to_mar, nrows = 3, shareX = TRUE)
+
+fig
+
+```
+---
+# Analysis of CPI Index Numbers and Percentage Changes
+
+The bar graphs show:
+1. **CPI Index Numbers - March Qtr 2024**:
+    - Higher in Brisbane and Sydney, indicating higher living costs.
+2. **Percentage Changes - Dec Qtr 2023 to Mar Qtr 2024**:
+    - Notable rises in Brisbane and Canberra, indicating short-term price pressures.
+3. **Percentage Changes - Mar Qtr 2023 to Mar Qtr 2024**:
+    - Significant annual increases in Adelaide and Sydney, highlighting sustained price increases.
+### Implications for the Cost-of-Living Crisis
+- **Economic Strain**: Rising CPI across all cities reflects growing financial pressure on households.
+- **Regional Variability**: Higher increases in certain cities suggest uneven impacts of the cost-of-living crisis.
+- **Policy Need**: Targeted interventions are essential to address high inflation areas and support affected households.
+
+---
+### Electricity Index, Australia
+
+```{r electricity-index, fig.height=7, fig.width=10, echo=FALSE}
+library(readr)
+library(plotly)
+
+electricity_data <- read_csv("/Users/ruthaalumary/Downloads/Electricity Index, Australia .csv", skip = 1)
+
+colnames(electricity_data) <- c("Date", "ExcludingRebates", "IncludingRebates")
+
+electricity_data$Date <- as.Date(paste0("01-", electricity_data$Date), format="%d-%b-%y")
+
+fig <- plot_ly(electricity_data, x = ~Date) %>%
+  add_lines(y = ~ExcludingRebates, name = "Excluding Government Rebates", line = list(color = 'rgb(219, 64, 82)', width = 2)) %>%
+  add_lines(y = ~IncludingRebates, name = "Including Government Rebates", line = list(color = 'rgb(55, 128, 191)', width = 2)) %>%
+  layout(title = "Electricity Index, Australia",
+         xaxis = list(title = "Date"),
+         yaxis = list(title = "Index Number"),
+         legend = list(x = 0.5, y = 0.5))
+
+fig
+```
+
+---
+# Analysis of Electricity Index, Australia
+The graph illustrates the changes in the Electricity Index in Australia from March 2023 to March 2024, both excluding and including government rebates.
+#### Key Points:
+1. **Excluding Government Rebates**:
+   - Sharp rise from July to September 2023.
+   - Indicates increased electricity costs for households without rebates.
+
+2. **Including Government Rebates**:
+   - Relatively stable with minor fluctuations.
+   - Government rebates mitigate cost spikes.
+
+#### Cost of Living Impact:
+- **Higher Expenses**: Increased electricity costs strain household budgets.
+- **Importance of Rebates**: Rebates help stabilize living costs.
+
+---
+
+# Conclusion
+================================
+
+In conclusion, our analysis of the cost-of-living crisis in Australia has highlighted the significant impact of rising inflation, stagnant wages, and global pressures on households. The data reveals that the cost of living is increasing, with higher prices in certain sectors, such as housing and electricity, exacerbating the situation.
+
+The CPI index numbers and percentage changes show a significant rise in prices across various categories, with regional variability in the impact of the crisis. The electricity index data highlights the importance of government rebates in mitigating the cost of living increases.
+
+The findings of this analysis have important implications for policymakers and economists. It is clear that targeted interventions are necessary to address the high inflation areas and support affected households. Furthermore, the data suggests that a holistic approach to addressing the cost-of-living crisis is required, taking into account the complex interplay between economic, social, and environmental factors.
+
+This analysis provides a comprehensive understanding of the cost-of-living crisis in Australia and highlights the need for effective policy solutions to address this pressing issue.
+
+---
+
+# References
+================================
+
+* Australian Bureau of Statistics (Mar-quarter-2024), Consumer Price Index, Australia, ABS Website, accessed 3 June 2024, <https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/latest-release#cite-window1>
+* Upmove (2024), "The Cost Of Living In Australia 2024", accessed on 3 June 2024, via the Upmove website: https://www.upmove.com.au/post/cost-of-living-in-australia
+* Evlin DuBose and Jack Dona (2024), "Cost of Living 2024: Everything you need to know about handling rising living costs", accessed on 4 June 2024, via the mozo website: https://mozo.com.au/family-finances/cost-of-living-guide
